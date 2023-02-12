@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@500;600&display=swap');
+
+
+body{
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-size: 1.7vw;
+}
+header{
+    h1{
+        text-align: center;
+        font-size: 6vw; 
+    }
+}
+.createrTODO{
+    display: flex;
+    justify-content: center;
+    input{
+        height: 5vw;
+        width: 35%;
+        outline: none;
+        border: none;
+        background-color: gainsboro;
+        font-size: 2vw;
+        padding-left: 2%;
+    }
+    button{
+        font-size: 2.4vw;
+        padding-left: 3%;
+        padding-right: 3%;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: .1s;
+        :active{
+            transform: scale(0.9);
+        }
+    }
+}
+ul{
+    padding-left: 0;
+}
+.todo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    input{
+        width: 3vw;
+        height: 3vw;
+        outline: none;
+        border: none;
+        background: red;
+    }
+    .text-through{
+        text-decoration: line-through;
+    }
+    .text-nodecor{
+        text-decoration: none;
+    }
+    h2{
+        padding-right: 4vw;
+        padding-left: 2vw;
+        width: 30vw;
+        word-wrap: break-word;
+    }
+    button{
+        border: none;
+        background: none;
+        cursor: pointer;
+        img{
+            height: 3.5vw;
+            width: 3.5vw; 
+        }
+    }
+}
