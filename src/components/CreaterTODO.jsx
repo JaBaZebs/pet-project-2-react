@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 
 export default function CreaterTODO({creater, ...props}) { 
   const [inputValue, setInputValue] = React.useState('');
+
   function addTodo(name){
     if(inputValue){
       setInputValue('');
@@ -17,6 +18,7 @@ export default function CreaterTODO({creater, ...props}) {
       }
     }
   }
+  
   return (
     <div className="createrTODO">
         <input value={inputValue} 
