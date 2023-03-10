@@ -1,24 +1,17 @@
+import Types from "./actionType.js";
+
 const defaultState = {
-    user: {
-        login: '',
-        password: ''
-    }
+    auth: false,
+    user : {
+        name: 'null',
+        todos: {null:'null'} 
+    },
+    loading: true
 }
-export default function tokenReducer(state = defaultState, action){
+export default function userReducer(state = defaultState, action){
     switch (action.type) {
-        case "SET_LOGIN":
-            return {...state, user: {...user, login: action.payload}};
-        case 'SET_PASSWORD':
-            return {...state, user:{...user, password: action.payload}};
-        case 'SET_USER':
-            return {...state, user: action.payload};
-        case 'RESET_USER':
-            return {...state, 
-                        user: {
-                                login: '',
-                                password: ''
-                              }
-                    }
+        case Types.SET_USER:
+            return {...state, ...action.payload};
         default:
             return state;
     }

@@ -1,82 +1,66 @@
+import ky from 'ky';
 import React, { useState } from 'react';
-import CustomInput from '../components/customInput.jsx';
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
-import fetchingData from '../hooks/fetch.js';
-import {useSelector, useDispatch} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Types from '../../redux/actionType.js';
-import './styles/RegisterPage.less'
-import WrongPasswordComp from '../components/wrongPasswordComp.jsx';
+import Form from '../components/Form/Form.jsx';
+import Loading from '../components/Loading/Loading.jsx';
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const[loginInput, setLogin] = useState('');
-    const[passwordInput, setPassword] = useState('');
-    const[fetching, setFetching] = useState(false);
-    const[isUserRegistred, setIsUserRegistred] = useState(false);
-    let navigate = useNavigate();
-   
-    async function httpRequest(){
-        setFetching(true);
-        setTimeout(() => {
-            const fetchinData = fetchingData("http://localhost:5000/register", 
-                                            {login: loginInput, password: passwordInput})
-            fetchinData.then((response) => response.json()).then((data) => setWrong(data))
-        },300);
-        
+    const user = useSelector(state => state);
+    const [login, setLogin] = useState('');
+    const [error, setError] = useState(false);
+    const [password, setPassword] = useState('');
+
+    const inputOneData = {name: 'Логин',
+                          state: login,
+                          setState: setLogin}
+    const inputTwoData = {name: 'Пароль',
+                          state: password,
+                          setState: setPassword};
+
+    const [loading, setLoading] = useState(false);
+    
+
+
+
+    function onSubmit(event){
+        event.preventDefault();
+        setLoading(true);
+        ky.post('http://localhost:5000/register', {json:{login: login, password: password}, credentials: 'include'})
+                .then((response) => response.json())
+                .then(data => submitHandling(data));
     }
-    function setWrong(data){
-        console.log(data, 'test');
-        if(data){
-            dispatch({type: Types.SET_AUTH_TRUE});
-            dispatch({type: Types.SET_USER, payload: {login: loginInput, password: passwordInput}});
-            navigate('/todos');
-            resetInputs();
-        }
-        else{
-            setIsUserRegistred(true);
-            console.log(isUserRegistred);
-        }
-        setFetching(false);
+
+    function submitHandling(data){
+        setLoading(false);
+        data.auth ? auth(data) : setError(true);
     }
-    function resetInputs() {
+    function auth(data){
+        dispatch({type: Types.SET_USER, payload: data});
+        setLogin('');
         setPassword('');
-            setLogin('');
+        setError(false);
     }
-    function submit(event){
-        if(!fetching){
-            event.preventDefault();
-            const test = httpRequest();                                       
-        }
-    }
-    useEffect(() => {
-        document.body.style.background = "#e3e8e6"; 
-    }, []);
+
     return (
-        (!fetching ?
-        <div className='registerPage'>
-            <form onSubmit={(event) => submit(event)}>
-                <h1>Регистрация</h1>
-                <WrongPasswordComp wrong={isUserRegistred} styles={{fontSize:'100%', marginTop: '10%', marginBottom: '0px'}}  text='Пользователь с таким логином уже зарегистрирован'/>
-                <div className='register-form-container'>
-                    
-                    <div className='register-container'>
-                        <CustomInput pole={loginInput} typeInput='login' setPole={setLogin} text='Логин'/>
-                        <CustomInput pole={passwordInput} typeInput='password' setPole={setPassword} text='Пароль'/>
-                    </div>
-                    <div className='link-container'>
-                        <Link style={{textAlign: 'left', 
-                                        fontSize: '1.8vw',
-                                        textDecoration: 'none',
-                                        }} to='/'>Войти</Link>
-                    </div>
-                    <button>Зарегистрироваться</button>
-                </div>
-            </form>
-        
-        </div>
-        :
-        <h1 style={{textAlign: 'center', marginTop:'50vh'}}>Регистрация...</h1>
+        (loading ?
+            <Loading/>
+            :
+            <div className='LoginPage'>
+                <Form inputOne={inputOneData}
+                    inputTwo={inputTwoData}
+                    constHandle={error}
+                    errorText='Данный пользователь уже зарегистрирован'
+                    title='Регистрация' 
+                    subtitle='Войти'
+                    buttonName='зарегистрироваться'
+                    link='/login'
+                    submitFunction={onSubmit}
+                />
+            </div>
         )
     );
 }

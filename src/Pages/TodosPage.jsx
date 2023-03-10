@@ -1,57 +1,59 @@
-import React, {useState, useEffect, useRef} from 'react'
-import Header from '../components/Header.jsx'
-import { useNavigate } from "react-router-dom";
-import CreaterTODO from '../components/CreaterTODO.jsx'
-import './styles/TodosPage.less'
-import userLogo from '../images/user.svg'
-import exitLogo from '../images/exit.svg'
-import TodoList from '../components/todoList.jsx';
-import {useSelector} from 'react-redux';
+import ky from 'ky';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Types from '../../redux/actionType.js';
-import Profile from '../components/profile.jsx';
+import Todo from '../components/Todo.jsx';
+import user_icon from '../img/user_icon.svg';
+import exit_img from '../img/exit_ico.svg'
+import './styles/TodosPage.less'
 
-
-export default function TodosPage() {
-  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")));
-  const isAuth = useSelector(state => state.auth.auth);
-  const user = useSelector(state => state.user.user.login);
-  const navigate = useNavigate();
-
-  
-  useEffect(() => {
-    document.body.style.background = "white";
-    console.log(isAuth);
-    console.log(user)
-    if(!isAuth){
-      navigate('/')
+const TodosPage = () => {
+    const user = useSelector(state => state);
+    const dispatch = useDispatch();
+    const todos = user.user.todos;
+    const [inputCreate, setInputCreate] = useState('');
+    const navigate = useNavigate();
+    function addTodo(event){
+        event.preventDefault();
+        const newTodos = [...user.user.todos, {done: false, text: inputCreate}];
+        dispatch({type: Types.SET_USER, payload: {user: {...user.user, todos: newTodos}}});
+        setInputCreate('');
+        ky.put('http://localhost:5000/puttodo', {json: {todos: newTodos}, credentials:'include'});
     }
-  }, []);
-
-  useEffect(() => {
-    saveTodos();
-  }, [todos]);
-
-  function addTodo(text){
-    setTodos([...todos, {text: text, done: false, id: todos.length}]);
-    saveTodos();
-  }
-  function setDone(id){
-    const newTodos = todos.map((todo, index) => index === id ? {...todo, done: !todo.done} : todo);
-    setTodos(newTodos);
-  }
-  function removeTodo(id){
-    const newTodos = todos.filter((todo, index) => index !== id);
-    setTodos(newTodos);
-  }
-  function saveTodos(){
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }
-  return (
-    <div>
-      <Profile username={user} LogoForUser={userLogo} LogoForExit={exitLogo}/>
-      <Header name="Ваш список дел"/>
-      <CreaterTODO creater={addTodo}/>
-      <TodoList array={todos} doneFunction={setDone} removeTodos={removeTodo}/> 
-    </div>
-  )
+    function exit(){
+        ky.post('http://localhost:5000/outlogin', {credentials:'include'}).json().then(data =>{
+            dispatch({type: Types.SET_USER, payload: {user: {...user.user}, auth: false,}});
+        })
+    };
+    return (
+        <div className='TodosPage'>
+            <header>
+                <div className='user'>
+                    <img src={user_icon}/>
+                    <h1>{user.user.name}</h1>
+                    <button className='exit' onClick={() => exit()}>
+                        <img src={exit_img}/>
+                    </button>
+                </div>
+                <form onSubmit={(event) => addTodo(event)} className='createTodo'>
+                    <div className='form-container'>
+                        <input value={inputCreate} onChange={(event) => setInputCreate(event.target.value)}/>
+                        <button type='submit'>Добавить</button>
+                    </div>
+                </form>
+            </header>
+            {todos.length > 0 ?
+                <ul className='todos'>
+                        {todos.map((todo, index) => (
+                            <Todo todo={todo} key={index} id={index}/>
+                        ))}
+                </ul>
+                :
+                <h2 style={{textAlign: 'center'}}>Задания не найдены</h2>
+            }
+        </div>
+    );
 }
+
+export default TodosPage;
