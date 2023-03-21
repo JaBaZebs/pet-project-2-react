@@ -2,7 +2,6 @@ import ky from 'ky';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch} from 'react-redux';
 import Types from '../../redux/actionType.js';
 import Form from '../components/Form/Form.jsx';
 import Loading from '../components/Loading/Loading.jsx';

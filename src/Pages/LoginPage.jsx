@@ -1,24 +1,12 @@
 import ky from 'ky';
-<<<<<<< HEAD
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-=======
 import React, {useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
->>>>>>> d20de100 (complete)
 import Types from '../../redux/actionType.js';
 import Form from '../components/Form/Form.jsx'
 import Loading from '../components/Loading/Loading.jsx';
 
 const LoginPage = () => {
-<<<<<<< HEAD
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector(state => state);
-=======
-    const dispatch = useDispatch();
->>>>>>> d20de100 (complete)
     const [error, setError] = useState(false);
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
