@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import ky from "ky";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,5 +35,15 @@ export default function App() {
       </Routes>
     </BrowserRouter>
     )
+=======
+  
+import React, { useEffect, useState } from "react";
+import Routers from "./components/Routers.jsx";
+
+export default function App() {
+
+  return(
+    <Routers/>
+>>>>>>> d20de100 (complete)
   )
 }
