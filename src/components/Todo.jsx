@@ -6,12 +6,8 @@ import img from '../img/delete_icon.svg'
 
 const Todo = ({todo, id,...props}) => {
     const dispatch = useDispatch();
-<<<<<<< HEAD
     const User = useSelector(state => state)
     const [check, setCheck] = useState(false);
-=======
-    const User = useSelector(state => state);
->>>>>>> d20de100 (complete)
     function clickInput(){
         const newTodos = User.user.todos.map((todo, index) => index === id ? {...todo, done: !todo.done} : todo);
         dispatch({type: Types.SET_USER, payload: {user: {...User.user, todos: newTodos}}});
