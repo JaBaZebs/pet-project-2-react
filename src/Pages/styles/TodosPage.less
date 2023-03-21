@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap');
+
+.TodosPage{
+    font-family: 'Montserrat Alternates', sans-serif;
+    header{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        column-gap: 20%;
+        .user{
+            align-items: center;
+            display: flex;
+            margin-left: 10%;
+            img{
+                height: 5vw;
+                width: 5vw;
+            }
+            h1{
+                margin: 9;
+                margin-left: 2%;
+                font-size: 3vw;
+                font-family: 'Ubuntu', sans-serif;
+                color:rgb(94, 94, 94)
+            }
+            .exit{
+                margin-left: 6%;
+                background: none;
+                border: none;
+                cursor: pointer;
+                img{
+                    height: 3vw;
+                    width: 3vw;
+                }
+            }
+        }
+        .createTodo{
+            .form-container{
+                display: flex;
+                input{
+                    width: 10vw;
+                    height: 2vw;
+                    outline: none;
+                }
+                button{
+                    font-size: 1vw;
+                }
+            }
+        }
+    }
+    .todos{
+        padding-left: 0;
+        .todo{
+            font-size: 1.5vw;
+            margin-right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            h2{
+                width: 42vw;
+                word-wrap: break-word;
+            }
+            button{
+                outline: none;
+                border: none;
+                cursor: pointer;
+                height: min-content;
+                background: none;
+                img{
+                    width: 2.5vw;
+                    height: 2.5vw;
+                }
+            }
+            input{
+                width: 2vw;
+                height:2vw;
+                margin-right: 1%;
+            }
+        }
+    }
+
+}
